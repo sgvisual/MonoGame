@@ -3,25 +3,21 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
+using Microsoft.Xna.Framework.Input;
 
 namespace Microsoft.Xna.Framework
 {
     /// <summary>
     /// This class is used for the game window's TextInput event as EventArgs.
     /// </summary>
-    public class TextInputEventArgs : EventArgs
+    public struct TextInputEventArgs
     {
-        char character;
-        public TextInputEventArgs(char character)
+        public TextInputEventArgs(char character, Keys key = Keys.None)
         {
-            this.character = character;
+            Character = character;
+            Key = key;
         }
-        public char Character
-        {
-            get
-            {
-                return character;
-            }
-        }
+        public readonly char Character;
+        public readonly Keys Key;
     }
 }

@@ -9,6 +9,7 @@ namespace Microsoft.Xna.Framework
     public class DrawableGameComponent : GameComponent, IDrawable
     {
         private bool _initialized;
+        private bool _disposed;
         private int _drawOrder;
         private bool _visible = true;
 
@@ -25,9 +26,7 @@ namespace Microsoft.Xna.Framework
                 if (_drawOrder != value)
                 {
                     _drawOrder = value;
-                    if (DrawOrderChanged != null)
-                        DrawOrderChanged(this, null);
-                    OnDrawOrderChanged(this, null);
+                    OnDrawOrderChanged(this, EventArgs.Empty);
                 }
             }
         }
@@ -40,8 +39,6 @@ namespace Microsoft.Xna.Framework
                 if (_visible != value)
                 {
                     _visible = value;
-                    if (VisibleChanged != null)
-                        VisibleChanged(this, EventArgs.Empty);
                     OnVisibleChanged(this, EventArgs.Empty);
                 }
             }
@@ -64,14 +61,29 @@ namespace Microsoft.Xna.Framework
             }
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                _disposed = true;
+                UnloadContent();
+            }
+        }
+
         protected virtual void LoadContent() { }
 
         protected virtual void UnloadContent () { }
 
         public virtual void Draw(GameTime gameTime) { }
 
-        protected virtual void OnVisibleChanged(object sender, EventArgs args) { }
+        protected virtual void OnVisibleChanged(object sender, EventArgs args)
+        {
+            EventHelpers.Raise(sender, VisibleChanged, args);
+        }
 
-        protected virtual void OnDrawOrderChanged(object sender, EventArgs args) { }
+        protected virtual void OnDrawOrderChanged(object sender, EventArgs args)
+        {
+            EventHelpers.Raise(sender, DrawOrderChanged, args);
+        }
     }
 }

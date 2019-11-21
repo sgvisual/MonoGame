@@ -1,4 +1,12 @@
 #!/bin/bash
+
+#fix permissions
+chmod +x /Applications/Pipeline.app/Contents/MacOS/Pipeline   
+chmod +x /Applications/Pipeline.app/Contents/MonoBundle/ffmpeg
+chmod +x /Applications/Pipeline.app/Contents/MonoBundle/ffprobe
+chmod +x /Applications/Pipeline.app/Contents/MonoBundle/mono
+/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -v -f /Applications/Pipeline.app
+
 #mgcb terminal command
 if [ ! -d /usr/local/bin ]
 then
@@ -17,10 +25,6 @@ fi
 echo "#!/bin/bash
 mono /Applications/Pipeline.app/Contents/MonoBundle/MGCB.exe \"\$@\"" >> /usr/local/bin/mgcb
 chmod u+x /usr/local/bin/mgcb
-#fix permissions
-chmod u+x /Applications/Pipeline.app/Contents/MonoBundle/ffmpeg
-chmod u+x /Applications/Pipeline.app/Contents/MonoBundle/ffprobe
-/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -v -f /Applications/Pipeline.app
 #write an uninstaller
 if [ -f /usr/local/bin/monogame-uninstall ]
 then
@@ -33,6 +37,9 @@ sudo pkgutil --forget com.monogame.pipeline
 if [ -d '/Applications/Xamarin Studio.app' ]
 then
   /Applications/Xamarin\ Studio.app/Contents/MacOS/mdtool setup uninstall MonoDevelop.MonoGame -y
+fi
+if [ ! -d '/Library/Frameworks/Mono.framework/Versions/4.6.2' ]
+	ln -s /Library/Frameworks/Mono.framework/Versions/Current /Library/Frameworks/Mono.framework/Versions/4.6.2
 fi
 sudo rm /usr/local/bin/mgcb
 sudo rm /usr/local/bin/monogame-uninstall

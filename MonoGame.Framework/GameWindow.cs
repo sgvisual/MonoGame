@@ -23,16 +23,12 @@ namespace Microsoft.Xna.Framework {
         /// </summary>
         public virtual bool AllowAltF4 { get { return _allowAltF4; } set { _allowAltF4 = value; } }
 
-#if (WINDOWS && !WINRT) || DESKTOPGL
+#if (WINDOWS && !WINDOWS_UAP) || DESKTOPGL
         /// <summary>
         /// The location of this window on the desktop, eg: global coordinate space
         /// which stretches across all screens.
         /// </summary>
         public abstract Point Position { get; set; }
-#endif
-
-#if DESKTOPGL
-        public abstract System.Drawing.Icon Icon { get; set; }
 #endif
 
 		public abstract DisplayOrientation CurrentOrientation { get; }
@@ -42,7 +38,14 @@ namespace Microsoft.Xna.Framework {
 		public abstract string ScreenDeviceName { get; }
 
 		private string _title;
-		public string Title {
+        /// <summary>
+        /// Gets or sets the title of the game window.
+        /// </summary>
+        /// <remarks>
+        /// For Windows 8 and Windows 10 UWP this has no effect. For these platforms the title should be
+        /// set by using the DisplayName property found in the app manifest file.
+        /// </remarks>
+        public string Title {
 			get { return _title; }
 			set {
 				if (_title != value) {
@@ -99,11 +102,24 @@ namespace Microsoft.Xna.Framework {
 		/// This event is only supported on the Windows DirectX, Windows OpenGL and Linux platforms.
 		/// </remarks>
 		public event EventHandler<TextInputEventArgs> TextInput;
+
+        internal bool IsTextInputHandled { get { return TextInput != null; } }
+
+        /// <summary>
+        /// Buffered keyboard KeyDown event.
+        /// </summary>
+		public event EventHandler<InputKeyEventArgs> KeyDown;
+
+        /// <summary>
+        /// Buffered keyboard KeyUp event.
+        /// </summary>
+        public event EventHandler<InputKeyEventArgs> KeyUp;
+
 #endif
 
-		#endregion Events
+        #endregion Events
 
-		public abstract void BeginScreenDeviceChange (bool willBeFullScreen);
+        public abstract void BeginScreenDeviceChange (bool willBeFullScreen);
 
 		public abstract void EndScreenDeviceChange (
 			string screenDeviceName, int clientWidth, int clientHeight);
@@ -117,10 +133,9 @@ namespace Microsoft.Xna.Framework {
 		{
 		}
 
-		protected void OnClientSizeChanged ()
+		internal void OnClientSizeChanged ()
 		{
-			if (ClientSizeChanged != null)
-				ClientSizeChanged (this, EventArgs.Empty);
+            EventHelpers.Raise(this, ClientSizeChanged, EventArgs.Empty);
 		}
 
 		protected void OnDeactivated ()
@@ -129,8 +144,7 @@ namespace Microsoft.Xna.Framework {
          
 		protected void OnOrientationChanged ()
 		{
-			if (OrientationChanged != null)
-				OrientationChanged (this, EventArgs.Empty);
+            EventHelpers.Raise(this, OrientationChanged, EventArgs.Empty);
 		}
 
 		protected void OnPaint ()
@@ -139,19 +153,25 @@ namespace Microsoft.Xna.Framework {
 
 		protected void OnScreenDeviceNameChanged ()
 		{
-			if (ScreenDeviceNameChanged != null)
-				ScreenDeviceNameChanged (this, EventArgs.Empty);
+            EventHelpers.Raise(this, ScreenDeviceNameChanged, EventArgs.Empty);
 		}
 
 #if WINDOWS || WINDOWS_UAP || DESKTOPGL || ANGLE
-		protected void OnTextInput(object sender, TextInputEventArgs e)
+		internal void OnTextInput(TextInputEventArgs e)
 		{
-			if (TextInput != null)
-				TextInput(sender, e);
+            EventHelpers.Raise(this, TextInput, e);
 		}
+        internal void OnKeyDown(InputKeyEventArgs e)
+	    {
+            EventHelpers.Raise(this, KeyDown, e);
+	    }
+        internal void OnKeyUp(InputKeyEventArgs e)
+	    {
+            EventHelpers.Raise(this, KeyUp, e);
+	    }
 #endif
 
-		protected internal abstract void SetSupportedOrientations (DisplayOrientation orientations);
+        protected internal abstract void SetSupportedOrientations (DisplayOrientation orientations);
 		protected abstract void SetTitle (string title);
 
 #if DIRECTX && WINDOWS

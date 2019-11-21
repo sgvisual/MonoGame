@@ -2,55 +2,36 @@
 <ExternalProject Name="PipelineReferences">
 
   <Platform Type="Linux">
-    <Binary
-      Name="gtk-sharp"
-      Path="ThirdParty\Dependencies\Gtk3\gtk-sharp.dll"
-      LocalCopy="False" />
-    <Binary
-      Name="atk-sharp"
-      Path="ThirdParty\Dependencies\Gtk3\atk-sharp.dll"
-      LocalCopy="False" />
-    <Binary
-      Name="gdk-sharp"
-      Path="ThirdParty\Dependencies\Gtk3\gdk-sharp.dll"
-      LocalCopy="False" />
-    <Binary
-      Name="glade-sharp"
-      Path="ThirdParty\Dependencies\Gtk3\gio-sharp.dll"
-      LocalCopy="False" />
-    <Binary
-      Name="glib-sharp"
-      Path="ThirdParty\Dependencies\Gtk3\glib-sharp.dll"
-      LocalCopy="False" />
-    <Binary
-      Name="gtk-dotnet"
-      Path="ThirdParty\Dependencies\Gtk3\gtk-dotnet.dll"
-      LocalCopy="False" />
-    <Binary
-      Name="pango-sharp"
-      Path="ThirdParty\Dependencies\Gtk3\pango-sharp.dll"
-      LocalCopy="False" />
-    <Binary
-      Name="Mono.Posix"
-      Path="ThirdParty\Dependencies\Gtk\Mono.Posix.dll"
-      LocalCopy="False" />
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0-preview.2" />
+    <Binary Name="Eto.Forms" Path="ThirdParty\Dependencies\Eto\Eto.dll" />
+    <Binary Name="Eto.Gtk" Path="ThirdParty\Dependencies\Eto\Eto.Gtk.dll" />
+      
+    <Binary Name="AtkSharp" Path="ThirdParty\Dependencies\Eto\AtkSharp.dll" />
+    <Binary Name="CairoSharp" Path="ThirdParty\Dependencies\Eto\CairoSharp.dll" />
+    <Binary Name="GdkSharp" Path="ThirdParty\Dependencies\Eto\GdkSharp.dll" />
+    <Binary Name="GioSharp" Path="ThirdParty\Dependencies\Eto\GioSharp.dll" />
+    <Binary Name="GLibSharp" Path="ThirdParty\Dependencies\Eto\GLibSharp.dll" />
+    <Binary Name="GtkSharp" Path="ThirdParty\Dependencies\Eto\GtkSharp.dll" />
+    <Binary Name="PangoSharp" Path="ThirdParty\Dependencies\Eto\PangoSharp.dll" />
   </Platform>
 
   <Platform Type="MacOS">
-    <Reference Include="atk-sharp"/>
-    <Reference Include="gdk-sharp"/>
-    <Reference Include="glade-sharp"/>
-    <Reference Include="glib-sharp"/>
-    <Reference Include="gtk-dotnet"/>
-    <Reference Include="gtk-sharp"/>
-    <Reference Include="pango-sharp"/>
-    <Reference Include="Mono.Posix"/>
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0-preview.2" />
+    <Binary Name="Eto.Forms" Path="ThirdParty\Dependencies\Eto\Eto.dll" />
+    <Binary Name="Eto.XamMac2" Path="ThirdParty\Dependencies\Eto\Eto.XamMac2.dll" />
   </Platform>
 
   <Platform Type="Windows">
+    <Binary Name="Eto.Forms" Path="ThirdParty\Dependencies\Eto\Eto.dll" />
+    <Binary Name="Eto.Wpf" Path="ThirdParty\Dependencies\Eto\Eto.Wpf.dll" />
+    
     <Reference Include="System.Deployment" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="WindowsBase" />
   </Platform>
 	
 </ExternalProject>

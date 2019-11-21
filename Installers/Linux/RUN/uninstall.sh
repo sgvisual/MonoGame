@@ -1,32 +1,34 @@
-#!/bin/sh
+#!/bin/bash
 
-#remove terminal commands for mgcb and pipeline tool
-if [ -f /bin/monogame-pipeline ]
-then
-	rm /bin/monogame-pipeline
+# Check removale priviledge
+if [ "$(id -u)" != "0" ]; then
+	echo "Please make sure you are running this uninstaller with sudo or as root." 1>&2
+	exit 1
 fi
 
-if [ -f /bin/mgcb ]
-then
-	rm /bin/mgcb
-fi
+# Remove terminal commands for mgcb and pipeline tool
+rm -f /usr/bin/monogame-pipeline-tool
+rm -f /usr/bin/monogame-uninstall
+rm -f /usr/bin/mgcb
+rm -f /etc/bash_completion.d/mgcb
 
-#remove application icon
-if [ -f /usr/share/icons/gnome/scalable/mimetypes/monogame.svg ]
-then
-	rm -rf /usr/share/icons/gnome/scalable/mimetypes/monogame.svg
-fi
+# Remove application icon
+rm -rf /usr/share/icons/gnome/scalable/mimetypes/monogame.svg
 
-#remove pipeline tool application launcher
-if [ -f /usr/share/applications/Monogame\ Pipeline.desktop ]
-then
-	rm /usr/share/applications/Monogame\ Pipeline.desktop
-fi
+# Remove pipeline tool application launcher
+rm -rf /usr/share/applications/Monogame\ Pipeline.desktop
 
-#remove MonoGame xbuild data
-if [ -d /usr/lib/mono/xbuild/MonoGame ]
-then
-	rm -rf /usr/lib/mono/xbuild/MonoGame
-fi
+# Remove mgcb mimetype
+touch /opt/MonoGameSDK/x-mgcb.xml
+xdg-mime uninstall /opt/MonoGameSDK/x-mgcb.xml
 
-#remove pipeline tool and self, the command for it is added by postinstall.sh
+# Remove MonoGame SDK
+rm -rf /usr/lib/mono/xbuild/MonoGame
+rm -rf /opt/MonoGameSDK
+
+# Remove man pages
+IFS=':' read -r -a ARRAY <<< "$(manpath)"
+for MANPATH in "${ARRAY[@]}"
+do
+	rm -rf "$MANPATH/man1/mgcb.1.gz"
+done

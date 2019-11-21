@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using System.Web;
+using System.Net;
 using System.Xml;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -175,7 +175,11 @@ namespace MonoGame.Tests.ContentPipeline
             {
                 a = null,
                 b = null,
-                c = string.Empty
+                c = string.Empty,
+                d = null,
+                e = CullMode.CullClockwiseFace,
+                f = CullMode.CullCounterClockwiseFace,
+                g = CullMode.CullClockwiseFace
             });
         }
 
@@ -412,8 +416,8 @@ namespace MonoGame.Tests.ContentPipeline
 
             for (var i = 32; i <= 126; i++)
                 fontDescription.Characters.Add((char) i);
-            fontDescription.Characters.Add(HttpUtility.HtmlDecode("&#916;")[0]);
-            fontDescription.Characters.Add(HttpUtility.HtmlDecode("&#176;")[0]);
+            fontDescription.Characters.Add(WebUtility.HtmlDecode("&#916;")[0]);
+            fontDescription.Characters.Add(WebUtility.HtmlDecode("&#176;")[0]);
 
             SerializeAndAssert("19_FontDescription.xml", fontDescription);
         }
@@ -488,6 +492,21 @@ namespace MonoGame.Tests.ContentPipeline
                 Red = Color.Red,
                 Green = Color.Green,
                 Blue = Color.Blue
+            });
+        }
+
+        [Test]
+        public void XnaCurve()
+        {
+            SerializeAndAssert("28_XnaCurve.xml", new Curve
+            {
+                PreLoop = CurveLoopType.Constant,
+                PostLoop = CurveLoopType.Constant,
+                Keys =
+                {
+                    new CurveKey(0,1,0,0,CurveContinuity.Smooth),
+                    new CurveKey(0.5f,0.5f,0,0,CurveContinuity.Smooth)
+                }
             });
         }
     }
